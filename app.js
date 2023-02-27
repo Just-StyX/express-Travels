@@ -1,23 +1,34 @@
 const express = require('express');
+const expressHandlebars = require('express-handlebars')
+const getHandler = require('./routes/getRoute')
 
 
 const app = express();
 const port = process.env.PORT || 3000;
 
 
+// create view engine
+app.engine('handlebars', expressHandlebars.engine({
+        defaultLayout: 'main',
+}))
+app.set('view engine', 'handlebars')
+
+
+app.get('/', getHandler.getHome)
+app.get('/about', getHandler.getAbout)
+
+
 // custom 404 page
 app.use((req, res) => {
-    res.type('text/plain');
     res.status(404)
-    res.send('404 - Not Found');
+    res.render('404');
 })
 
 // custon 500 page
 app.use((err, req, res, next) => {
     console.log(err.message)
-    res.type('text/plain')
     res.status(500)
-    res.send('500 - Server Error');
+    res.render('500');
 })
 
 app.listen(port, function(){
