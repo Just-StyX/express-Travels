@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const expressHandlebars = require('express-handlebars')
 const getHandler = require('./routes/getRoute')
 
@@ -13,6 +14,9 @@ app.engine('handlebars', expressHandlebars.engine({
 }))
 app.set('view engine', 'handlebars')
 
+// configure static files
+const publicPath = path.join(__dirname, '/public')
+app.use(express.static(publicPath))
 
 app.get('/', getHandler.getHome)
 app.get('/about', getHandler.getAbout)
